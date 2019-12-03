@@ -26,9 +26,11 @@ endif()
 
 set(SOURCES
     src/main.cpp
+    src/simple_graph.cpp
     )
 
 set(HEADERS
+    include/simple_graph.h
     )
 
 set(OTHER
