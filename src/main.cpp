@@ -17,7 +17,7 @@ enum class VertexState
 
 std::tuple<std::vector<std::vector<int>>, std::vector<std::string>> load_file()
 {
-    std::ifstream file("./input.txt");
+    std::ifstream file("./graph.txt");
     if (!file.is_open())
         throw std::runtime_error("file not open");
 
@@ -94,6 +94,7 @@ int main()
     std::vector<VertexState> nodes(matrix_size, VertexState::Undetected);
 
     queue.push(0);
+    auto vertex_index = 0u;
     while(!queue.empty())
     {
         size_t node = queue.front();
@@ -109,7 +110,8 @@ int main()
                 nodes[j] = VertexState::Detected;
             }
         }
-        std::cout << "vert " << vertexes.at(node) << std::endl;
+        std::cout << "vert " << vertexes.at(vertex_index) << " : " << node + 1 << std::endl;
+        ++vertex_index;
     }
 
     return 0;
