@@ -7,9 +7,16 @@
 
 enum class VertexState
 {
-    Undetected = 0,
-    Detected,
-    Visited
+    NotProcessed = 0,
+    Processed,
+    Detected
+};
+
+struct node
+{
+    int left_index{-1};
+    int right_index{-1};
+    std::string name;
 };
 
 class simple_graph

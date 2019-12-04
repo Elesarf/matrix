@@ -1,7 +1,10 @@
 #include <fstream>
 #include <iostream>
 #include <queue>
-#include "../include/simple_graph.h"
+#include <stack>
+#include <list>
+
+#include "simple_graph.h"
 
 simple_graph::simple_graph(std::string fileName, std::string matrixEntity, std::string vertexEntity)
 {
@@ -75,33 +78,55 @@ void simple_graph::printGraph() const
         std::cout << v.second << " : " << v.first << std::endl;
 }
 
+static bool allChecked(const std::vector<VertexState> vec)
+{
+    for (const auto &v:vec)
+        if (v != VertexState::Processed)
+            return false;
+    return true;
+}
+
 void simple_graph::calculateGraph()
 {
-
-    std::queue<size_t> queue;
-    auto matrix_size = m_adjMatrix.size();
-
-    std::vector<VertexState> nodes(matrix_size, VertexState::Undetected);
-
-    queue.push(0);
+    auto vertex_count = m_adjMatrix.size();
+    std::vector<VertexState> nodes(vertex_count, VertexState::NotProcessed);
+    std::stack<size_t> stack;
     auto vertex_index = 0u;
-    while(!queue.empty())
-    {
-        size_t node = queue.front();
 
-        queue.pop();
-        nodes[node] = VertexState::Visited;
+    while (!allChecked(nodes)) {
 
-        for(size_t j = 0; j < matrix_size; ++j)
-        {
-            if (m_adjMatrix.at(node).at(j) == 1 && nodes.at(j) == VertexState::Undetected)
-            {
-                queue.push(j);
-                nodes[j] = VertexState::Detected;
-            }
+        auto now_index = 0u;
+
+        for (const auto &v:nodes){
+            if (v == VertexState::NotProcessed)
+                break;
+
+            ++now_index;
         }
 
-        m_graph.insert({(node + 1), m_vertexes.at(vertex_index)});
-        ++vertex_index;
+        if (now_index == vertex_count)
+            break;
+
+        // insert root vertex index in to stack
+        stack.push(now_index);
+
+        while(!stack.empty())
+        {
+            auto now_node = stack.top();
+            nodes[now_node] = VertexState::Processed;
+            stack.pop();
+
+            for(size_t j = 0; j < vertex_count; ++j)
+            {
+                if (m_adjMatrix.at(now_node).at(j) == 1 && nodes.at(j) == VertexState::NotProcessed)
+                {
+                    stack.push(j);
+                    break;
+                }
+            }
+
+            m_graph.insert({(now_node + 1), m_vertexes.at(vertex_index)});
+            ++vertex_index;
+        }
     }
 }
