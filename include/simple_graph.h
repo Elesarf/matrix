@@ -29,6 +29,7 @@ public:
     void printUserData() const;
     void printGraph() const;
     void calculateGraph();
+    void saveGraph(const std::string &filePath);
 private:
     std::vector<std::vector<int>> m_adjMatrix;
     std::vector<std::string> m_vertexes;

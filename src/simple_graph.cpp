@@ -130,3 +130,18 @@ void simple_graph::calculateGraph()
         }
     }
 }
+
+void simple_graph::saveGraph(const std::string &filePath)
+{
+    std::ofstream file;
+    file.open(filePath);
+
+    if (!file.is_open())
+        throw std::runtime_error("error open file");
+
+    for (const auto &v:m_graph)
+        file << v.second << " : " << v.first << std::endl;
+
+    file.close();
+
+}

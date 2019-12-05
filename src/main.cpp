@@ -6,6 +6,7 @@ int main()
     gr.printUserData();
     gr.calculateGraph();
     gr.printGraph();
+    gr.saveGraph("saved_graph.txt");
 
     return 0;
 }
